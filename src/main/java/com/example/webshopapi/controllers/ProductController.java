@@ -49,23 +49,35 @@ public class ProductController {
         return productService.createProduct(product);
     }
 
-    @PutMapping("/{id}")
 
-         public Product updateProduct(@PathVariable int id,
-                                         @RequestParam("name") String name,
-                                         @RequestParam("price") double price,
-                                         @RequestParam("stock") int stock,
-                                         @RequestParam("description") String description,
-                                         @RequestParam("image") MultipartFile image) throws IOException {
-                Product product = new Product();
-                product.setId(id);
-                product.setName(name);
-                product.setPrice(price);
-                product.setStock(stock);
-                product.setDescription(description);
-                product.setImage(image.getBytes());
-                return productService.updateProduct(id, product);
-            }
+    @PutMapping("/{id}")
+    public Product updateProduct(@PathVariable int id, @RequestBody ProductDto productDto) throws IOException {
+        Product product = new Product();
+        product.setId(id);
+        product.setName(productDto.getName());
+        product.setPrice(productDto.getPrice());
+        product.setStock(productDto.getStock());
+        product.setDescription(productDto.getDescription());
+        product.setImage(Base64.getDecoder().decode(productDto.getImageBase64()));
+        return productService.updateProduct(id, product);
+    }
+//    @PutMapping("/{id}")
+//
+//         public Product updateProduct(@PathVariable int id,
+//                                         @RequestParam("name") String name,
+//                                         @RequestParam("price") double price,
+//                                         @RequestParam("stock") int stock,
+//                                         @RequestParam("description") String description,
+//                                         @RequestParam("image") MultipartFile image) throws IOException {
+//                Product product = new Product();
+//                product.setId(id);
+//                product.setName(name);
+//                product.setPrice(price);
+//                product.setStock(stock);
+//                product.setDescription(description);
+//                product.setImage(image.getBytes());
+//                return productService.updateProduct(id, product);
+//    }
 
 
     @DeleteMapping("/{id}")
