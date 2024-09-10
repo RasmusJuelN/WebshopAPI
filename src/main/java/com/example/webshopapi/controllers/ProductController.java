@@ -27,58 +27,30 @@ public class ProductController {
     }
 
     @GetMapping("/{id}")
-    public Product getProductById(@PathVariable int id) {
+    public ProductDto getProductById(@PathVariable int id) {
         return productService.getProductById(id);
     }
 
-    //TODO: on front end encode the image as a Base64 string and include it in the JSON payload.
-
-
-    @PostMapping
-    public Product createProduct(@RequestParam("name") String name,
-                                 @RequestParam("price") double price,
-                                 @RequestParam("stock") int stock,
-                                 @RequestParam("description") String description,
-                                 @RequestParam("image") MultipartFile image) throws IOException {
-        Product product = new Product();
-        product.setName(name);
-        product.setPrice(price);
-        product.setStock(stock);
-        product.setDescription(description);
-        product.setImage(image.getBytes());
-        return productService.createProduct(product);
+    @PostMapping(consumes = "multipart/form-data")
+    public ProductDto createProduct(
+            @RequestParam("name") String name,
+            @RequestParam("price") double price,
+            @RequestParam("stock") int stock,
+            @RequestParam("description") String description,
+            @RequestParam("image") MultipartFile image) throws IOException {
+        return productService.createProduct(name, price, stock, description, image);
     }
 
-
-    @PutMapping("/{id}")
-    public Product updateProduct(@PathVariable int id, @RequestBody ProductDto productDto) throws IOException {
-        Product product = new Product();
-        product.setId(id);
-        product.setName(productDto.getName());
-        product.setPrice(productDto.getPrice());
-        product.setStock(productDto.getStock());
-        product.setDescription(productDto.getDescription());
-        product.setImage(Base64.getDecoder().decode(productDto.getImageBase64()));
-        return productService.updateProduct(id, product);
+    @PutMapping(value = "/{id}", consumes = "multipart/form-data")
+    public ProductDto updateProduct(
+            @PathVariable int id,
+            @RequestParam("name") String name,
+            @RequestParam("price") double price,
+            @RequestParam("stock") int stock,
+            @RequestParam("description") String description,
+            @RequestParam("image") MultipartFile image) throws IOException {
+        return productService.updateProduct(id, name, price, stock, description, image);
     }
-//    @PutMapping("/{id}")
-//
-//         public Product updateProduct(@PathVariable int id,
-//                                         @RequestParam("name") String name,
-//                                         @RequestParam("price") double price,
-//                                         @RequestParam("stock") int stock,
-//                                         @RequestParam("description") String description,
-//                                         @RequestParam("image") MultipartFile image) throws IOException {
-//                Product product = new Product();
-//                product.setId(id);
-//                product.setName(name);
-//                product.setPrice(price);
-//                product.setStock(stock);
-//                product.setDescription(description);
-//                product.setImage(image.getBytes());
-//                return productService.updateProduct(id, product);
-//    }
-
 
     @DeleteMapping("/{id}")
     public void deleteProduct(@PathVariable int id) {
