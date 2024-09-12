@@ -12,6 +12,8 @@ public class Product {
     private String name;
     private double price;
     private int stock;
+
+    @Column(length = 1000)
     private String description;
     @Lob
     private byte[] image;

@@ -2,6 +2,7 @@ package com.example.webshopapi.dto;
 
 public class UserDto {
     private String username;
+    private String password;
 
     public String getPassword() {
         return password;
@@ -19,7 +20,7 @@ public class UserDto {
         this.username = username;
     }
 
-    private String password;
+
 
     // Getters and Setters
 }
